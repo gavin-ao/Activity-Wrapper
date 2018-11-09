@@ -88,7 +88,7 @@
     </dependencies>
 
     <build>
-        <finalName>channel_logger</finalName>
+        <finalName>activity_wrapper</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

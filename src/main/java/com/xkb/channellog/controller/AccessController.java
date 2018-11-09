@@ -18,24 +18,35 @@ import java.util.*;
 
 @Controller
 @CrossOrigin
-public class SayHello {
+public class AccessController {
    @Autowired
    AccessEntity accessEntity;
    @Autowired
    JedisPool jedisPool;
-   @RequestMapping("/hello")
+
+   /**
+    * 活动入口
+    * @param request
+    * @param channel
+    * @return
+    */
+   @RequestMapping("/gate")
    public String redirect(HttpServletRequest request,
                           @RequestParam(name="channel",required=false,defaultValue="unknown")String channel){
 
       String ip = IpUtil.getIpAddr(request);
-      Date accessTime = new Date();
-      log(ip,channel,accessTime);
+      log(ip,channel);
       return "redirect:https://wx3d3e228b169fb31f.h5.xiaoe-tech.com/coupon/get/cou_5bda7a189b55f-IlaVlH";
    }
 
-
-   private void log(String ip, String channel,Date accessTime) {
+   /**
+    * 将请求信息存入到redis中
+    * @param ip
+    * @param channel
+    */
+   private void log(String ip, String channel) {
       Jedis jedis = null;
+      Date accessTime = new Date();
       try {
          jedis = jedisPool.getResource();
          SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -55,9 +66,13 @@ public class SayHello {
 
    }
 
-   @RequestMapping("/hello/statis")
+   /***
+    * 统计分析渠道信息
+    * @return
+    */
+   @RequestMapping("/channelanalysis")
    @ResponseBody
-   public JSONObject channelStatis(){
+   public JSONObject channelanalysis(){
       Jedis jedis = null;
       try{
        jedis = jedisPool.getResource();
@@ -76,7 +91,7 @@ public class SayHello {
 
    }
 
-   @RequestMapping("/hello/detail")
+   @RequestMapping("/channeldetail")
    @ResponseBody
    public JSONArray detail(){
       Jedis jedis = null;
